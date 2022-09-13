@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>Introduction to XProc</title>
+    <meta name="version" content="S5 1.2a2" />
+    <link rel="stylesheet" href="ui/default/slides.css" type="text/css" media="projection" id="slideProj" />
+    <link rel="stylesheet" href="ui/default/opera.css" type="text/css"  media="projection" id="operaFix" />
+    <link rel="stylesheet" href="ui/default/print.css" type="text/css"  media="print" id="slidePrint" />
+    <link rel="stylesheet" href="ui/default/outline.css" type="text/css" media="screen" id="outlineStyle" />
+    <script src="ui/default/slides.js" type="text/javascript"></script>
+    <!-- Code hightlighting -->
+    <link rel="stylesheet" href="hljs/styles/default.min.css">
+    <script src="hljs/highlight.js" type="text/javascript"></script>
+    <script src="hljs/languages/xml.min.js" type="text/javascript"></script>
+    <script>hljs.highlightAll();</script>
+  </head>
+  <body>
+
+    <div class="layout">
+
+      <div id="currentSlide"></div>
+      <header></header>
+      <footer>
+        <h1>TEI Conference and Members' Meeting 2022 · Newcastle UK</h1>
+      </footer>
+      <div id="controls"></div>
+
+    </div>
+
+    <main>
+
+      <article>
+        <h1>Introduction to XProc</h1>
+        <h3>David Maus &lt;dmaus@dmaus.name&gt;</h3>
+        <h4>State and University Library Hamburg</h4>
+        <p><a href="https://github.com/dmj/xproc-workshop-tei2022-public">github.com/dmj/xproc-workshop-tei2022-public</a></p>
+      </article>
+
+      <article>
+        <h1>About me</h1>
+        <ul>
+          <li>Head of research and development at the State and
+          University Library Hamburg</li>
+          <li>Liaison to digital humanities research at the University
+          of Hamburg and other higher education institutions.</li>
+          <li>Author of SchXslt, a modern implementation of the Schematron validation language</li>
+          <li>Member of the XProc.next community group</li>
+        </ul>
+      </article>
+
+      <article>
+        <h1>Agenda</h1>
+      </article>
+
+      <article>
+        <h1>What is XProc</h1>
+        <p><dfn>XProc</dfn> is a XML-based programming language for
+        complex data processing. It is comprised of a set of small,
+        sharp tools (steps) for creating and transforming XML and
+          other documents.</p>
+        <p>Version 1.0 has been around sind 2010, version 3.0 is
+          expected to be published as community report in late 2022.</p>
+        <p>There currently is one working processor
+        (<a href="https://www.xml-project.com/morganaxproc-iii/">MorganaXProc-III</a>)
+        and another one (<a href="https://xmlcalabash.com">XML
+        Calabash 3</a>) under way.
+      </article>
+
+      <article>
+        <h1>Use cases</h1>
+        <dl>
+          <dt>Publication pipeline</dt>
+          <dd>
+            <ul>
+              <li>Process input documents to different target formats</li>
+              <li>Orchestrate transformations, validations, and other document processing tasks</li>
+            </ul>
+          </dd>
+          <dt>Data maintenance</dt>
+          <dd>
+            <ul>
+              <li>Validate and modify a set of source documents over time</li>
+              <li>One-off error corrections</li>
+            </ul>
+          </dd>
+        </dl>
+      </article>
+
+      <article>
+        <h1>Setting up XProc 3.0 and MorganaXProc-III</h1>
+        <p>The workshop material contains a runnable version of MorganaXProc-III in the <code>bin/morgana</code> folder.</p>
+        <p>Try to run it from the commandline!</p>
+        <p>The workshop material contains an &lt;oXygen/> project that defines an XProc 3.0 document type.</p>
+      </article>
+
+      <article>
+        <h1>Exercise 1</h1>
+        <p>Run the pipeline <code>01-hello/pipeline.xpl</code></p>
+      </article>
+
+      <article>
+        <h1>Anatomy of a simple pipeline</h1>
+        <p>An XProc <dfn>pipeline</dfn> consists of one or more steps.</p>
+        <p>It has zero or more input ports, one beeing the primary
+        input port. An <dfn>input port</dfn> is a named source of
+        documents (data). By convention the primary input port is
+        named <code>source</code>.</p>
+        <p>It has zero or more output ports. one beeing the primary
+        output port. An <dfn>output port</dfn> is a named target for
+        documents (data). By convention the primary output port is
+        named <code>result</code>.</p>
+      </article>
+
+      <article>
+        <h1>A simple pipeline</h1>
+        <pre><code class="language-xml">&lt;p:declare-step version="3.0"
+                xmlns:p="http://www.w3.org/ns/xproc">
+
+  &lt;p:input port="source"/>
+  &lt;p:output port="result"/>
+
+  &lt;p:identity/>
+
+&lt;/p:declare-step></code></pre>
+        <p>Both <code>input</code> and <code>output</code> ports may
+        have a boolean <code>sequence</code> attribute. When set
+        to <code>true</code> the port accepts a possibly empty
+        sequence of documents. The default value
+        is <code>false</code>.</p>
+      </article>
+
+      <article>
+        <h1>A simple pipeline with options</h1>
+        <pre><code class="language-xml">&lt;p:declare-step version="3.0"
+                xmlns:p="http://www.w3.org/ns/xproc"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  &lt;p:input port="source"/>
+  &lt;p:output port="result"/>
+
+  &lt;p:option name="name" as="xs:string" required="true"/>
+
+  &lt;p:identity message="Hello {$name}! Just passing through!"/>
+
+&lt;/p:declare-step></code></pre>
+      </article>
+
+      <article>
+        <h1>A simple pipeline with options and documentation</h1>
+        <pre><code class="language-xml">&lt;p:declare-step version="3.0"
+                xmlns:p="http://www.w3.org/ns/xproc"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  &lt;p:documentation>
+    This is a simple pipeline with one input port, one output port,
+    and one option.
+  &lt;/p:documentation>
+
+  &lt;p:input port="source"/>
+  &lt;p:output port="result"/>
+
+  &lt;p:option name="name" as="xs:string" required="true"/>
+
+  &lt;p:identity message="Hello {$name}! Just passing through!"/>
+
+&lt;/p:declare-step></code></pre>
+      </article>
+
+    </main>
+
+    <article>
+      <h1>Exercise 2</h1>
+      <p>Run the pipeline <code>02-simple/pipeline.xpl</code>.</p>
+    </article>
+
+    <article>
+      <h1>Read the docs</h1>
+      <p>Some orientation around the <a href="https://xproc.org/specifications.html">specifications page</a>.</p>
+    </article>
+
+    <article class="title">
+      <h1>Connecting steps</h1>
+    </article>
+
+    <article>
+      <h1>Implicit port connections</h1>
+      <pre><code class="language-xml">&lt;p:declare-step xmlns:p="http://www.w3.org/ns/xproc">
+
+  &lt;p:input port="source"/>
+  &lt;p:output port="result"/>
+
+  &lt;p:xslt name="xslt-1">
+    &lt;p:with-input port="stylesheet" href="xslt-1.xsl"/>
+  &lt;/p:xslt>
+
+  &lt;p:xslt name="xslt-2">
+    &lt;p:with-input port="stylesheet" href="xslt-2.xsl"/>
+  &lt;/p:xslt>
+
+&lt;/p:declare-step></code></pre>
+    </article>
+
+    <article>
+      <h1>Implicit port connections</h1>
+      <figure style="float: right; width: 50%;">
+        <img src="implicit-connection-1.svg" style="width: 100%">
+      </figure>
+      <p>The primary input port of your pipeline is connected to the
+      primary input port of the first step, the primary output port
+      connected to the primary output port of the last step.</p>
+    </article>
+
+    <article>
+      <h1>Implicit port connections</h1>
+      <figure style="float: right; width: 50%;">
+        <img src="implicit-connection-2.svg" style="width: 100%">
+      </figure>
+      <p>The primary input port of your pipeline is connected to the
+      primary input port of the first step, the primary output port
+      connected to the primary output port of the last step.</p>
+      <p>When one step follows another and no explicit port connection
+      is present, the primary output port of the first step is
+      connected to the primary input port of the second step.</p>
+    </article>
+
+    <article>
+      <h1>Port connections</h1>
+      <p>For simple steps or pipelines implicit port connections are
+      sufficiant.</p>
+      <p>If a pipeline feeds a document to two independent steps, we
+        have to use explicit port connections.</p>
+    </article>
+
+    <article>
+      <h1>Connecting ports: Explicit</h1>
+      <p>You can explicitly connect the input ports of a step:</p>
+      <ul>
+        <li>...to a specific output port of another step (<code>@pipe)</code></li>
+        <li>...to an external document (<code>@href</code>)</li>
+        <li>...to an inline document (<code>p:inline</code>)</li>
+        <li>...to the empty sequence (<code>p:empty</code>)</li>
+      </ul>
+    </article>
+
+    <article>
+      <h1>Explicit port connections</h1>
+      <pre><code class="language-xml">&lt;p:declare-step version="3.0"
+                xmlns:p="http://www.w3.org/ns/xproc">
+
+  &lt;p:output port="result" pipe="result@create-html"/>
+  &lt;p:output port="result.rdf" pipe="result@create-rdf"/>
+
+  &lt;p:load href="document.xml" name="load-document"/>
+
+  &lt;p:xslt name="create-html">
+    &lt;p:with-input port="source" pipe="result@load-document"/>
+    &lt;p:with-input port="stylesheet" href="tei2html.xsl"/>
+  &lt;/p:xslt>
+
+  &lt;p:xslt name="create-rdf">
+    &lt;p:with-input port="source" pipe="result@load-document"/>
+    &lt;p:with-input port="stylesheet" href="tei2rdf.xsl"/>
+  &lt;/p:xslt>
+
+&lt;/p:declare-step></code></pre>
+    </article>
+
+    <article>
+      <h1>Explicit port connections</h1>
+      <figure>
+        <img src="explicit-connection-1.svg" style="width: 60%;">
+      </figure>
+    </article>
+
+    <article>
+      <h1>Explicit port connections</h1>
+      <figure>
+        <img src="explicit-connection-2.svg" style="width: 60%;">
+      </figure>
+    </article>
+
+    <article>
+      <h1>Explicit port connections</h1>
+      <p>The order in which steps are executed is defined by their
+        port connections, <em>not</em> by their order in a pipeline.</p>
+      <p>This is true of implicit port connections as well: The order
+      of steps in the pipeline defines their implicit connections such
+      that the steps are executed in document order.</p>
+      <p>Steps that don't depend on another are executed in no defined order
+    </article>
+
+    <article>
+      <h1>Port connections</h1>
+      <pre><code class="language-xml">&lt;p:declare-step version="3.0"
+                xmlns:p="http://www.w3.org/ns/xproc">
+
+  &lt;p:load href="document.xml"/>
+
+  &lt;p:xslt>
+    &lt;p:with-input port="stylesheet" href="process.xsl"/>
+  &lt;/p:xslt>
+
+  &lt;p:store href="processed-document.xml"/>
+
+  &lt;p:load href="processed-document.xml"/>
+
+  &lt;p:xslt>
+    &lt;p:with-input port="stylesheet" href="extract-info.xsl"/>
+  &lt;/p:xslt>
+
+&lt;/p:declare-step></code></pre>
+    </article>
+
+    <article>
+      <h1>Port connections</h1>
+      <figure>
+        <img src="disconnected.svg" style="width: 50%;">
+      </figure>
+    </article>
+
+    <article>
+      <h1>Exercise 3</h1>
+      <p>Run the pipeline <code>03-explicit-ports/pipeline.xpl</code>.</p>
+    </article>
+
+    <article>
+      <h1>Exercise 4</h1>
+      <p>Write a pipeline that loads and modifies a specific document as follows:</p>
+      <ol>
+        <li>Unwrap <code>rs</code> and <code>w</code> elements</li>
+        <li>Delete the <code>corresp</code> attribute</li>
+        <li>Insert a timestamped <code>change</code> element in the <code>revisionDesc</code></li>
+      </ol>
+    </article>
+
+    <article>
+      <h1>Exercise 5</h1>
+      <p>Write a pipeline that removes the <code>pos</code> attribute from each <code>document.xml</code> and stores the modified document as <code>document.xml.new</code>.</p>
+    </article>
+
+    <article>
+      <h1>Resources</h1>
+      <ul>
+        <li><a href="https://spec.xproc.org/lastcall-2020-08/head/xproc/">XProc 3.0: An XML Pipeline Language</a> (Draft Community Group)</li>
+        <li><a href="https://spec.xproc.org/lastcall-2020-08/head/steps/">XProc 3.0: Standard Step Library</a> (Draft Community Group Report)</li>
+        <li>Siegel, Erik (2020): XProc 3.0 Programmer Reference</li>
+        <li>xml.com <a href="https://www.xml.com/articles/?tag=xproc%203.0">articles</a>
+        <li>xml.com <a href="https://xmlcom.slack.com">Slack Channel</a></li>
+      </ul>
+    </article>
+
+
+  </body>
+</html>

@@ -1,0 +1,9 @@
+/* Do not edit or override these styles! The system will likely break if you do. */
+
+header, footer, div#controls, article {position: absolute;}
+html>body header, html>body footer, 
+  html>body div#controls, html>body article {position: fixed;}
+.handout {display: none;}
+.layout {display: block;}
+article, .hideme, .incremental {visibility: hidden;}
+#slide0 {visibility: visible;}
