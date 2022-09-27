@@ -325,6 +325,14 @@
                         <String>key.editor.document.type.association.option.pane</String>
                         <Boolean>true</Boolean>
                     </entry>
+                    <entry>
+                        <String>key.relax.ng.option.pane</String>
+                        <Boolean>true</Boolean>
+                    </entry>
+                    <entry>
+                        <String>validation.relax-ng.id-idref</String>
+                        <Boolean>false</Boolean>
+                    </entry>
                 </serializableOrderedMap>
             </serialized>
         </options>
